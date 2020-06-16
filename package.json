@@ -1,16 +1,21 @@
 {
-  "name": "blog-vue-press-dev-hbc",
+  "name": "blog-vuepress",
   "version": "1.0.0",
-  "description": "",
+  "description": "filled description",
   "main": "index.js",
+  "repository": "https://www.github.com/dev-hbc",
+  "author": "dev-hbc",
+  "license": "MIT",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "dev": "vuepress dev docs",
+    "build": "vuepress build docs"
   },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "vuepress": "^1.5.2"
+  "dependencies": {
+    "vuepress": "1.0.3",
+    "vuepress-theme-reco": "1.0.8-alpha.3",
+    "@vuepress/plugin-medium-zoom": "1.0.0-alpha.0",
+    "vuepress-plugin-flowchart": "1.4.3",
+    "@vuepress/plugin-pwa": "1.0.0-alpha.3"
   }
 }
