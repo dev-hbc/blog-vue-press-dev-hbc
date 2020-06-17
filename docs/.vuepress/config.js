@@ -1,4 +1,5 @@
 module.exports = {
+  base: "/blog-vue-press-dev-hbc/",
   title: "Hongbin's Blog",
   description: '\\xCC\\xCD fill the empty',
   dest: 'public',
