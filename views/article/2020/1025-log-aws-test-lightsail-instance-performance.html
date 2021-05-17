@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>A draft - Test AWS LightSail Instance Performance | Hongbin&#39;s Blog</title>
+    <meta name="generator" content="VuePress 1.5.2">
+    <link rel="icon" href="/blog-vue-press-dev-hbc/favicon.ico">
+    <meta name="description" content="\xCC\xCD fill the empty">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <link rel="preload" href="/blog-vue-press-dev-hbc/assets/css/0.styles.c0e3c99d.css" as="style"><link rel="preload" href="/blog-vue-press-dev-hbc/assets/js/app.0418dc1b.js" as="script"><link rel="preload" href="/blog-vue-press-dev-hbc/assets/js/3.1c8a2787.js" as="script"><link rel="preload" href="/blog-vue-press-dev-hbc/assets/js/1.3cdefb19.js" as="script"><link rel="preload" href="/blog-vue-press-dev-hbc/assets/js/21.2391c26f.js" as="script"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/10.5c1836f3.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/11.7df2e90f.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/12.45881b9a.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/13.3325151c.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/14.7c3d1a5c.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/15.8e0e0b64.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/16.d883de14.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/17.ea527396.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/18.ad625142.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/19.19e5071f.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/20.279d05e5.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/22.128c1817.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/23.daea9976.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/4.aea5c48f.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/5.6bd3b319.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/6.9a207cc0.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/7.8c444d62.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/8.5c65ed74.js"><link rel="prefetch" href="/blog-vue-press-dev-hbc/assets/js/9.7cff2bf9.js">
+    <link rel="stylesheet" href="/blog-vue-press-dev-hbc/assets/css/0.styles.c0e3c99d.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container" data-v-b318bb22><div data-v-b318bb22><div id="loader-wrapper" class="loading-wrapper" data-v-d48f4d20 data-v-b318bb22 data-v-b318bb22><div class="loader-main" data-v-d48f4d20><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div><div data-v-d48f4d20></div></div> <!----> <!----></div> <div class="password-shadow password-wrapper-out" style="display:none;" data-v-712cf4e2 data-v-b318bb22 data-v-b318bb22><h3 class="title" style="display:none;" data-v-712cf4e2 data-v-712cf4e2>Hongbin's Blog</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-712cf4e2 data-v-712cf4e2><input type="password" value="" data-v-712cf4e2> <span data-v-712cf4e2>Konck! Knock!</span> <button data-v-712cf4e2>OK</button></label> <div class="footer" style="display:none;" data-v-712cf4e2 data-v-712cf4e2><span data-v-712cf4e2><i class="iconfont reco-theme" data-v-712cf4e2></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-712cf4e2>vuePress-theme-reco</a></span> <span data-v-712cf4e2><i class="iconfont reco-copyright" data-v-712cf4e2></i> <a data-v-712cf4e2><span data-v-712cf4e2>Hongbin's Blog</span>
+            
+          <!---->
+          2021
+        </a></span></div></div> <div class="hide" data-v-b318bb22><header class="navbar" data-v-b318bb22><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/blog-vue-press-dev-hbc/" class="home-link router-link-active"><img src="/blog-vue-press-dev-hbc/head.png" alt="Hongbin's Blog" class="logo"> <span class="site-name">Hongbin's Blog</span></a> <div class="links"><div class="color-picker"><a class="color-button"><i class="iconfont reco-color"></i></a> <div class="color-picker-menu" style="display:none;"><div class="mode-options"><h4 class="title">Choose mode</h4> <ul class="color-mode-options"><li class="dark">dark</li><li class="auto active">auto</li><li class="light">light</li></ul></div></div></div> <div class="search-box"><i class="iconfont reco-search"></i> <input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="https://github.com/dev-hbc" target="_blank" rel="noopener noreferrer" class="nav-link external"><i class="iconfont reco-github"></i>
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      Category
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/article/" class="nav-link"><i class="iconfont undefined"></i>
+  article
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/note/" class="nav-link"><i class="iconfont undefined"></i>
+  note
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/tip/" class="nav-link"><i class="iconfont undefined"></i>
+  tip
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/draft/" class="nav-link"><i class="iconfont undefined"></i>
+  draft
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/log/" class="nav-link"><i class="iconfont undefined"></i>
+  log
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/recette/" class="nav-link"><i class="iconfont undefined"></i>
+  recette
+</a></li></ul></div></div><div class="nav-item"><a href="/blog-vue-press-dev-hbc/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  Tag
+</a></div><div class="nav-item"><a href="/blog-vue-press-dev-hbc/" class="nav-link"><i class="iconfont reco-home"></i>
+  Home
+</a></div><div class="nav-item"><a href="/blog-vue-press-dev-hbc/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  TimeLine
+</a></div> <!----></nav></div></header> <div class="sidebar-mask" data-v-b318bb22></div> <aside class="sidebar" data-v-b318bb22><div class="personal-info-wrapper" data-v-713d7156><!----> <h3 class="name" data-v-713d7156>
+    Hongbin's Blog
+  </h3> <div class="num" data-v-713d7156><div data-v-713d7156><h3 data-v-713d7156>13</h3> <h6 data-v-713d7156>Article</h6></div> <div data-v-713d7156><h3 data-v-713d7156>13</h3> <h6 data-v-713d7156>Tag</h6></div></div> <hr data-v-713d7156></div> <nav class="nav-links"><div class="nav-item"><a href="https://github.com/dev-hbc" target="_blank" rel="noopener noreferrer" class="nav-link external"><i class="iconfont reco-github"></i>
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></div><div class="nav-item"><div class="dropdown-wrapper"><a class="dropdown-title"><span class="title"><i class="iconfont reco-category"></i>
+      Category
+    </span> <span class="arrow right"></span></a> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/article/" class="nav-link"><i class="iconfont undefined"></i>
+  article
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/note/" class="nav-link"><i class="iconfont undefined"></i>
+  note
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/tip/" class="nav-link"><i class="iconfont undefined"></i>
+  tip
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/draft/" class="nav-link"><i class="iconfont undefined"></i>
+  draft
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/log/" class="nav-link"><i class="iconfont undefined"></i>
+  log
+</a></li><li class="dropdown-item"><!----> <a href="/blog-vue-press-dev-hbc/categories/recette/" class="nav-link"><i class="iconfont undefined"></i>
+  recette
+</a></li></ul></div></div><div class="nav-item"><a href="/blog-vue-press-dev-hbc/tag/" class="nav-link"><i class="iconfont reco-tag"></i>
+  Tag
+</a></div><div class="nav-item"><a href="/blog-vue-press-dev-hbc/" class="nav-link"><i class="iconfont reco-home"></i>
+  Home
+</a></div><div class="nav-item"><a href="/blog-vue-press-dev-hbc/timeline/" class="nav-link"><i class="iconfont reco-date"></i>
+  TimeLine
+</a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>A draft - Test AWS LightSail Instance Performance</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/blog-vue-press-dev-hbc/views/article/2020/1025-log-aws-test-lightsail-instance-performance.html#summary" class="sidebar-link">Summary</a><ul class="sidebar-sub-headers"></ul></li><li><a href="/blog-vue-press-dev-hbc/views/article/2020/1025-log-aws-test-lightsail-instance-performance.html#procedure" class="sidebar-link">Procedure</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/blog-vue-press-dev-hbc/views/article/2020/1025-log-aws-test-lightsail-instance-performance.html#_1-update-dependencies" class="sidebar-link">1. Update dependencies</a></li><li class="sidebar-sub-header"><a href="/blog-vue-press-dev-hbc/views/article/2020/1025-log-aws-test-lightsail-instance-performance.html#_2-update-dependencies" class="sidebar-link">2. Update dependencies</a></li><li class="sidebar-sub-header"><a href="/blog-vue-press-dev-hbc/views/article/2020/1025-log-aws-test-lightsail-instance-performance.html#_3-perform-tests" class="sidebar-link">3. perform tests</a></li></ul></li></ul></section></li></ul> </aside> <div class="password-shadow password-wrapper-in" style="display:none;" data-v-712cf4e2 data-v-b318bb22><h3 class="title" style="display:none;" data-v-712cf4e2 data-v-712cf4e2>A draft - Test AWS LightSail Instance Performance</h3> <!----> <label id="box" class="inputBox" style="display:none;" data-v-712cf4e2 data-v-712cf4e2><input type="password" value="" data-v-712cf4e2> <span data-v-712cf4e2>Konck! Knock!</span> <button data-v-712cf4e2>OK</button></label> <div class="footer" style="display:none;" data-v-712cf4e2 data-v-712cf4e2><span data-v-712cf4e2><i class="iconfont reco-theme" data-v-712cf4e2></i> <a target="blank" href="https://vuepress-theme-reco.recoluan.com" data-v-712cf4e2>vuePress-theme-reco</a></span> <span data-v-712cf4e2><i class="iconfont reco-copyright" data-v-712cf4e2></i> <a data-v-712cf4e2><span data-v-712cf4e2>Hongbin's Blog</span>
+            
+          <!---->
+          2021
+        </a></span></div></div> <div data-v-b318bb22><main class="page"><div class="page-title" style="display:none;"><h1>A draft - Test AWS LightSail Instance Performance</h1> <hr> <div data-v-a71c92f8><i class="iconfont reco-account" data-v-a71c92f8><span data-v-a71c92f8>Hongbin</span></i> <i class="iconfont reco-date" data-v-a71c92f8><span data-v-a71c92f8>2020-10-25</span></i> <!----> <i class="iconfont reco-tag tags" data-v-a71c92f8><span class="tag-item" data-v-a71c92f8>aws</span><span class="tag-item" data-v-a71c92f8>LightSail</span></i></div></div> <div class="theme-reco-content content__default" style="display:none;"><h2 id="summary"><a href="#summary" class="header-anchor">#</a> Summary</h2> <h2 id="procedure"><a href="#procedure" class="header-anchor">#</a> Procedure</h2> <p>Now I have another lightsail instance apart from previous one caz the resources(vCPU) it has were quite limited. And after having new instance, the one I am the most curious about is the performance.</p> <h3 id="_1-update-dependencies"><a href="#_1-update-dependencies" class="header-anchor">#</a> 1. Update dependencies</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sudo yum -y update
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package awscli.noarch 0:1.18.107-1.amzn2.0.1 will be updated
+---&gt; Package awscli.noarch 0:1.18.147-1.amzn2.0.1 will be an update
+---&gt; Package ec2-net-utils.noarch 0:1.4-2.amzn2 will be updated
+---&gt; Package ec2-net-utils.noarch 0:1.4-3.amzn2 will be an update
+---&gt; Package kernel.x86_64 0:4.14.198-152.320.amzn2 will be installed
+---&gt; Package kernel-tools.x86_64 0:4.14.193-149.317.amzn2 will be updated
+---&gt; Package kernel-tools.x86_64 0:4.14.198-152.320.amzn2 will be an update
+---&gt; Package p11-kit.x86_64 0:0.23.19-1.amzn2 will be updated
+---&gt; Package p11-kit.x86_64 0:0.23.21-2.amzn2.0.1 will be an update
+---&gt; Package p11-kit-trust.x86_64 0:0.23.19-1.amzn2 will be updated
+---&gt; Package p11-kit-trust.x86_64 0:0.23.21-2.amzn2.0.1 will be an update
+---&gt; Package pam.x86_64 0:1.1.8-22.amzn2 will be updated
+---&gt; Package pam.x86_64 0:1.1.8-23.amzn2.0.1 will be an update
+---&gt; Package python2-botocore.noarch 0:1.17.31-1.amzn2.0.1 will be updated
+---&gt; Package python2-botocore.noarch 0:1.18.6-1.amzn2.0.1 will be an update
+---&gt; Package python2-rpm.x86_64 0:4.11.3-40.amzn2.0.4 will be updated
+---&gt; Package python2-rpm.x86_64 0:4.11.3-40.amzn2.0.5 will be an update
+---&gt; Package rpm.x86_64 0:4.11.3-40.amzn2.0.4 will be updated
+---&gt; Package rpm.x86_64 0:4.11.3-40.amzn2.0.5 will be an update
+---&gt; Package rpm-build-libs.x86_64 0:4.11.3-40.amzn2.0.4 will be updated
+---&gt; Package rpm-build-libs.x86_64 0:4.11.3-40.amzn2.0.5 will be an update
+---&gt; Package rpm-libs.x86_64 0:4.11.3-40.amzn2.0.4 will be updated
+---&gt; Package rpm-libs.x86_64 0:4.11.3-40.amzn2.0.5 will be an update
+---&gt; Package rpm-plugin-systemd-inhibit.x86_64 0:4.11.3-40.amzn2.0.4 will be updated
+---&gt; Package rpm-plugin-systemd-inhibit.x86_64 0:4.11.3-40.amzn2.0.5 will be an update
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+===========================================================================================================================
+ Package                                Arch               Version                            Repository              Size
+===========================================================================================================================
+Installing:
+ kernel                                 x86_64             4.14.198-152.320.amzn2             amzn2-core              21 M
+Updating:
+ awscli                                 noarch             1.18.147-1.amzn2.0.1               amzn2-core             2.1 M
+ ec2-net-utils                          noarch             1.4-3.amzn2                        amzn2-core              17 k
+ kernel-tools                           x86_64             4.14.198-152.320.amzn2             amzn2-core             136 k
+ p11-kit                                x86_64             0.23.21-2.amzn2.0.1                amzn2-core             316 k
+ p11-kit-trust                          x86_64             0.23.21-2.amzn2.0.1                amzn2-core             128 k
+ pam                                    x86_64             1.1.8-23.amzn2.0.1                 amzn2-core             715 k
+ python2-botocore                       noarch             1.18.6-1.amzn2.0.1                 amzn2-core             4.4 M
+ python2-rpm                            x86_64             4.11.3-40.amzn2.0.5                amzn2-core              84 k
+ rpm                                    x86_64             4.11.3-40.amzn2.0.5                amzn2-core             1.2 M
+ rpm-build-libs                         x86_64             4.11.3-40.amzn2.0.5                amzn2-core             106 k
+ rpm-libs                               x86_64             4.11.3-40.amzn2.0.5                amzn2-core             275 k
+ rpm-plugin-systemd-inhibit             x86_64             4.11.3-40.amzn2.0.5                amzn2-core              47 k
+
+Transaction Summary
+===========================================================================================================================
+Install   1 Package
+Upgrade  12 Packages
+
+Total download size: 30 M
+Downloading packages:
+Delta RPMs disabled because /usr/bin/applydeltarpm not installed.
+(1/13): ec2-net-utils-1.4-3.amzn2.noarch.rpm                                                        |  17 kB  00:00:00     
+(2/13): awscli-1.18.147-1.amzn2.0.1.noarch.rpm                                                      | 2.1 MB  00:00:00     
+(3/13): kernel-tools-4.14.198-152.320.amzn2.x86_64.rpm                                              | 136 kB  00:00:00     
+(4/13): p11-kit-0.23.21-2.amzn2.0.1.x86_64.rpm                                                      | 316 kB  00:00:00     
+(5/13): p11-kit-trust-0.23.21-2.amzn2.0.1.x86_64.rpm                                                | 128 kB  00:00:00     
+(6/13): pam-1.1.8-23.amzn2.0.1.x86_64.rpm                                                           | 715 kB  00:00:00     
+(7/13): python2-botocore-1.18.6-1.amzn2.0.1.noarch.rpm                                              | 4.4 MB  00:00:00     
+(8/13): python2-rpm-4.11.3-40.amzn2.0.5.x86_64.rpm                                                  |  84 kB  00:00:00     
+(9/13): rpm-4.11.3-40.amzn2.0.5.x86_64.rpm                                                          | 1.2 MB  00:00:00     
+(10/13): kernel-4.14.198-152.320.amzn2.x86_64.rpm                                                   |  21 MB  00:00:00     
+(11/13): rpm-build-libs-4.11.3-40.amzn2.0.5.x86_64.rpm                                              | 106 kB  00:00:00     
+(12/13): rpm-plugin-systemd-inhibit-4.11.3-40.amzn2.0.5.x86_64.rpm                                  |  47 kB  00:00:00     
+(13/13): rpm-libs-4.11.3-40.amzn2.0.5.x86_64.rpm                                                    | 275 kB  00:00:00     
+---------------------------------------------------------------------------------------------------------------------------
+Total                                                                                       69 MB/s |  30 MB  00:00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Updating   : rpm-4.11.3-40.amzn2.0.5.x86_64                                                                         1/25 
+  Updating   : rpm-libs-4.11.3-40.amzn2.0.5.x86_64                                                                    2/25 
+  Updating   : rpm-build-libs-4.11.3-40.amzn2.0.5.x86_64                                                              3/25 
+  Updating   : python2-botocore-1.18.6-1.amzn2.0.1.noarch                                                             4/25 
+  Updating   : p11-kit-0.23.21-2.amzn2.0.1.x86_64                                                                     5/25 
+  Updating   : p11-kit-trust-0.23.21-2.amzn2.0.1.x86_64                                                               6/25 
+  Updating   : awscli-1.18.147-1.amzn2.0.1.noarch                                                                     7/25 
+  Updating   : python2-rpm-4.11.3-40.amzn2.0.5.x86_64                                                                 8/25 
+  Updating   : rpm-plugin-systemd-inhibit-4.11.3-40.amzn2.0.5.x86_64                                                  9/25 
+  Updating   : kernel-tools-4.14.198-152.320.amzn2.x86_64                                                            10/25 
+  Installing : kernel-4.14.198-152.320.amzn2.x86_64                                                                  11/25 
+  Updating   : pam-1.1.8-23.amzn2.0.1.x86_64                                                                         12/25 
+  Updating   : ec2-net-utils-1.4-3.amzn2.noarch                                                                      13/25 
+  Cleanup    : python2-rpm-4.11.3-40.amzn2.0.4.x86_64                                                                14/25 
+  Cleanup    : awscli-1.18.107-1.amzn2.0.1.noarch                                                                    15/25 
+  Cleanup    : rpm-build-libs-4.11.3-40.amzn2.0.4.x86_64                                                             16/25 
+  Cleanup    : p11-kit-trust-0.23.19-1.amzn2.x86_64                                                                  17/25 
+  Cleanup    : rpm-plugin-systemd-inhibit-4.11.3-40.amzn2.0.4.x86_64                                                 18/25 
+  Cleanup    : python2-botocore-1.17.31-1.amzn2.0.1.noarch                                                           19/25 
+  Cleanup    : ec2-net-utils-1.4-2.amzn2.noarch                                                                      20/25 
+  Cleanup    : rpm-libs-4.11.3-40.amzn2.0.4.x86_64                                                                   21/25 
+  Cleanup    : rpm-4.11.3-40.amzn2.0.4.x86_64                                                                        22/25 
+  Cleanup    : p11-kit-0.23.19-1.amzn2.x86_64                                                                        23/25 
+  Cleanup    : kernel-tools-4.14.193-149.317.amzn2.x86_64                                                            24/25 
+  Cleanup    : pam-1.1.8-22.amzn2.x86_64                                                                             25/25 
+  Verifying  : p11-kit-0.23.21-2.amzn2.0.1.x86_64                                                                     1/25 
+  Verifying  : python2-rpm-4.11.3-40.amzn2.0.5.x86_64                                                                 2/25 
+  Verifying  : rpm-plugin-systemd-inhibit-4.11.3-40.amzn2.0.5.x86_64                                                  3/25 
+  Verifying  : rpm-libs-4.11.3-40.amzn2.0.5.x86_64                                                                    4/25 
+  Verifying  : ec2-net-utils-1.4-3.amzn2.noarch                                                                       5/25 
+  Verifying  : pam-1.1.8-23.amzn2.0.1.x86_64                                                                          6/25 
+  Verifying  : python2-botocore-1.18.6-1.amzn2.0.1.noarch                                                             7/25 
+  Verifying  : kernel-4.14.198-152.320.amzn2.x86_64                                                                   8/25 
+  Verifying  : rpm-4.11.3-40.amzn2.0.5.x86_64                                                                         9/25 
+  Verifying  : p11-kit-trust-0.23.21-2.amzn2.0.1.x86_64                                                              10/25 
+  Verifying  : kernel-tools-4.14.198-152.320.amzn2.x86_64                                                            11/25 
+  Verifying  : rpm-build-libs-4.11.3-40.amzn2.0.5.x86_64                                                             12/25 
+  Verifying  : awscli-1.18.147-1.amzn2.0.1.noarch                                                                    13/25 
+  Verifying  : ec2-net-utils-1.4-2.amzn2.noarch                                                                      14/25 
+  Verifying  : rpm-4.11.3-40.amzn2.0.4.x86_64                                                                        15/25 
+  Verifying  : awscli-1.18.107-1.amzn2.0.1.noarch                                                                    16/25 
+  Verifying  : p11-kit-trust-0.23.19-1.amzn2.x86_64                                                                  17/25 
+  Verifying  : rpm-build-libs-4.11.3-40.amzn2.0.4.x86_64                                                             18/25 
+  Verifying  : p11-kit-0.23.19-1.amzn2.x86_64                                                                        19/25 
+  Verifying  : pam-1.1.8-22.amzn2.x86_64                                                                             20/25 
+  Verifying  : kernel-tools-4.14.193-149.317.amzn2.x86_64                                                            21/25 
+  Verifying  : rpm-libs-4.11.3-40.amzn2.0.4.x86_64                                                                   22/25 
+  Verifying  : rpm-plugin-systemd-inhibit-4.11.3-40.amzn2.0.4.x86_64                                                 23/25 
+  Verifying  : python2-botocore-1.17.31-1.amzn2.0.1.noarch                                                           24/25 
+  Verifying  : python2-rpm-4.11.3-40.amzn2.0.4.x86_64                                                                25/25 
+
+Installed:
+  kernel.x86_64 0:4.14.198-152.320.amzn2                                                                                   
+
+Updated:
+  awscli.noarch 0:1.18.147-1.amzn2.0.1                   ec2-net-utils.noarch 0:1.4-3.amzn2                               
+  kernel-tools.x86_64 0:4.14.198-152.320.amzn2           p11-kit.x86_64 0:0.23.21-2.amzn2.0.1                             
+  p11-kit-trust.x86_64 0:0.23.21-2.amzn2.0.1             pam.x86_64 0:1.1.8-23.amzn2.0.1                                  
+  python2-botocore.noarch 0:1.18.6-1.amzn2.0.1           python2-rpm.x86_64 0:4.11.3-40.amzn2.0.5                         
+  rpm.x86_64 0:4.11.3-40.amzn2.0.5                       rpm-build-libs.x86_64 0:4.11.3-40.amzn2.0.5                      
+  rpm-libs.x86_64 0:4.11.3-40.amzn2.0.5                  rpm-plugin-systemd-inhibit.x86_64 0:4.11.3-40.amzn2.0.5          
+
+Complete!
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br><span class="line-number">77</span><br><span class="line-number">78</span><br><span class="line-number">79</span><br><span class="line-number">80</span><br><span class="line-number">81</span><br><span class="line-number">82</span><br><span class="line-number">83</span><br><span class="line-number">84</span><br><span class="line-number">85</span><br><span class="line-number">86</span><br><span class="line-number">87</span><br><span class="line-number">88</span><br><span class="line-number">89</span><br><span class="line-number">90</span><br><span class="line-number">91</span><br><span class="line-number">92</span><br><span class="line-number">93</span><br><span class="line-number">94</span><br><span class="line-number">95</span><br><span class="line-number">96</span><br><span class="line-number">97</span><br><span class="line-number">98</span><br><span class="line-number">99</span><br><span class="line-number">100</span><br><span class="line-number">101</span><br><span class="line-number">102</span><br><span class="line-number">103</span><br><span class="line-number">104</span><br><span class="line-number">105</span><br><span class="line-number">106</span><br><span class="line-number">107</span><br><span class="line-number">108</span><br><span class="line-number">109</span><br><span class="line-number">110</span><br><span class="line-number">111</span><br><span class="line-number">112</span><br><span class="line-number">113</span><br><span class="line-number">114</span><br><span class="line-number">115</span><br><span class="line-number">116</span><br><span class="line-number">117</span><br><span class="line-number">118</span><br><span class="line-number">119</span><br><span class="line-number">120</span><br><span class="line-number">121</span><br><span class="line-number">122</span><br><span class="line-number">123</span><br><span class="line-number">124</span><br><span class="line-number">125</span><br><span class="line-number">126</span><br><span class="line-number">127</span><br><span class="line-number">128</span><br><span class="line-number">129</span><br><span class="line-number">130</span><br><span class="line-number">131</span><br><span class="line-number">132</span><br><span class="line-number">133</span><br><span class="line-number">134</span><br><span class="line-number">135</span><br><span class="line-number">136</span><br><span class="line-number">137</span><br><span class="line-number">138</span><br><span class="line-number">139</span><br><span class="line-number">140</span><br><span class="line-number">141</span><br><span class="line-number">142</span><br></div></div><h3 id="_2-update-dependencies"><a href="#_2-update-dependencies" class="header-anchor">#</a> 2. Update dependencies</h3> <div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sudo yum install sysbench
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+amzn2-core                                                                                          | 3.7 kB  00:00:00     
+No package sysbench available.
+Error: Nothing to do
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sudo yum search epel-release
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+Warning: No matches found for: epel-release
+No matches found
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sudo yum repolist
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+repo id                                                 repo name                                                    status
+amzn2-core/2/x86_64                                     Amazon Linux 2 core repository                               21,106
+amzn2extra-docker/2/x86_64                              Amazon Extras repo for docker                                    28
+repolist: 21,134
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sudo yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+epel-release-latest-7.noarch.rpm                                                                    |  15 kB  00:00:00     
+Examining /var/tmp/yum-root-FFmWzr/epel-release-latest-7.noarch.rpm: epel-release-7-12.noarch
+Marking /var/tmp/yum-root-FFmWzr/epel-release-latest-7.noarch.rpm to be installed
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package epel-release.noarch 0:7-12 will be installed
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+=========================================================================================================================== 
+Package                     Arch                  Version              Repository                                    Size
+===========================================================================================================================
+Installing:
+ epel-release                noarch                7-12                 /epel-release-latest-7.noarch                 24 k
+
+Transaction Summary
+===========================================================================================================================
+Install  1 Package
+
+Total size: 24 k
+Installed size: 24 k
+Downloading packages:
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : epel-release-7-12.noarch                                                                                1/1 
+  Verifying  : epel-release-7-12.noarch                                                                                1/1 
+
+Installed:
+  epel-release.noarch 0:7-12                                                                                               
+
+Complete!
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sudo yum install sysbench
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+Existing lock /var/run/yum.pid: another copy is running as pid 32152.
+Another app is currently holding the yum lock; waiting for it to exit...
+  The other application is: yum
+    Memory : 291 M RSS (581 MB VSZ)
+    Started: Sun Oct 25 03:13:58 2020 - 00:09 ago
+    State  : Running, pid: 32152
+194 packages excluded due to repository priority protections
+Resolving Dependencies
+--&gt; Running transaction check
+---&gt; Package sysbench.x86_64 0:1.0.17-2.el7 will be installed
+--&gt; Processing Dependency: libck.so.0()(64bit) for package: sysbench-1.0.17-2.el7.x86_64
+--&gt; Processing Dependency: libluajit-5.1.so.2()(64bit) for package: sysbench-1.0.17-2.el7.x86_64
+--&gt; Processing Dependency: libpq.so.5()(64bit) for package: sysbench-1.0.17-2.el7.x86_64
+--&gt; Running transaction check
+---&gt; Package ck.x86_64 0:0.5.2-2.el7 will be installed
+---&gt; Package luajit.x86_64 0:2.0.4-3.el7 will be installed
+---&gt; Package postgresql-libs.x86_64 0:9.2.24-1.amzn2.0.1 will be installed
+--&gt; Finished Dependency Resolution
+
+Dependencies Resolved
+
+=========================================================================================================================== 
+Package                        Arch                  Version                              Repository                 Size
+===========================================================================================================================
+Installing:
+ sysbench                       x86_64                1.0.17-2.el7                         epel                      152 k
+Installing for dependencies:
+ ck                             x86_64                0.5.2-2.el7                          epel                       26 k
+ luajit                         x86_64                2.0.4-3.el7                          epel                      343 k
+ postgresql-libs                x86_64                9.2.24-1.amzn2.0.1                   amzn2-core                235 k
+
+Transaction Summary
+===========================================================================================================================
+Install  1 Package (+3 Dependent packages)
+
+Total download size: 756 k
+Installed size: 2.3 M
+Is this ok [y/d/N]: y
+Downloading packages:
+warning: /var/cache/yum/x86_64/2/epel/packages/ck-0.5.2-2.el7.x86_64.rpm: Header V3 RSA/SHA256 Signature, key ID 352c64e5: NOKEY
+Public key for ck-0.5.2-2.el7.x86_64.rpm is not installed
+(1/4): ck-0.5.2-2.el7.x86_64.rpm                                                                    |  26 kB  00:00:00     
+(2/4): luajit-2.0.4-3.el7.x86_64.rpm                                                                | 343 kB  00:00:00     
+(3/4): sysbench-1.0.17-2.el7.x86_64.rpm                                                             | 152 kB  00:00:00     
+(4/4): postgresql-libs-9.2.24-1.amzn2.0.1.x86_64.rpm                                                | 235 kB  00:00:00     
+---------------------------------------------------------------------------------------------------------------------------
+Total                                                                                      2.5 MB/s | 756 kB  00:00:00     
+Retrieving key from file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+Importing GPG key 0x352C64E5:
+ Userid     : &quot;Fedora EPEL (7) &lt;epel@fedoraproject.org&gt;&quot;
+ Fingerprint: 91e9 7d7c 4a5e 96f1 7f3e 888f 6a2f aea2 352c 64e5
+ Package    : epel-release-7-12.noarch (installed)
+ From       : /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+Is this ok [y/N]: y
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : postgresql-libs-9.2.24-1.amzn2.0.1.x86_64                                                               1/4 
+  Installing : luajit-2.0.4-3.el7.x86_64                                                                               2/4 
+  Installing : ck-0.5.2-2.el7.x86_64                                                                                   3/4 
+  Installing : sysbench-1.0.17-2.el7.x86_64                                                                            4/4 
+  Verifying  : ck-0.5.2-2.el7.x86_64                                                                                   1/4 
+  Verifying  : sysbench-1.0.17-2.el7.x86_64                                                                            2/4 
+  Verifying  : luajit-2.0.4-3.el7.x86_64                                                                               3/4 
+  Verifying  : postgresql-libs-9.2.24-1.amzn2.0.1.x86_64                                                               4/4 
+
+Installed:
+  sysbench.x86_64 0:1.0.17-2.el7                                                                                           
+
+Dependency Installed:
+  ck.x86_64 0:0.5.2-2.el7         luajit.x86_64 0:2.0.4-3.el7         postgresql-libs.x86_64 0:9.2.24-1.amzn2.0.1        
+
+Complete!
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br><span class="line-number">55</span><br><span class="line-number">56</span><br><span class="line-number">57</span><br><span class="line-number">58</span><br><span class="line-number">59</span><br><span class="line-number">60</span><br><span class="line-number">61</span><br><span class="line-number">62</span><br><span class="line-number">63</span><br><span class="line-number">64</span><br><span class="line-number">65</span><br><span class="line-number">66</span><br><span class="line-number">67</span><br><span class="line-number">68</span><br><span class="line-number">69</span><br><span class="line-number">70</span><br><span class="line-number">71</span><br><span class="line-number">72</span><br><span class="line-number">73</span><br><span class="line-number">74</span><br><span class="line-number">75</span><br><span class="line-number">76</span><br></div></div><h3 id="_3-perform-tests"><a href="#_3-perform-tests" class="header-anchor">#</a> 3. perform tests</h3> <p>1st</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sysbench --test=cpu --cpu-max-prime=2000 run
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+sysbench 1.0.17 (using system LuaJIT 2.0.4)
+
+Running the test with following options:
+Number of threads: 1
+Initializing random number generator from current time
+
+
+Prime numbers limit: 2000
+
+Initializing worker threads...
+
+Threads started!
+
+CPU speed:
+    events per second:  8127.57
+
+General statistics:
+    total time:                          10.0002s
+    total number of events:              81293
+
+Latency (ms):
+         min:                                    0.12
+         avg:                                    0.12
+         max:                                    0.61
+         95th percentile:                        0.12
+         sum:                                 9864.01
+
+Threads fairness:
+    events (avg/stddev):           81293.0000/0.00
+    execution time (avg/stddev):   9.8640/0.00
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br></div></div><p>2st</p> <div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ sysbench  --test=threads --num-threads=500 --thread-yields=100 --thread-locks=4 run
+WARNING: the --test option is deprecated. You can pass a script name or path on the command line without any options.
+WARNING: --num-threads is deprecated, use --threads instead
+sysbench 1.0.17 (using system LuaJIT 2.0.4)
+
+Running the test with following options:
+Number of threads: 500
+Initializing random number generator from current time
+
+
+Initializing worker threads...
+
+Threads started!
+
+
+General statistics:
+    total time:                          10.0460s
+    total number of events:              125602
+
+Latency (ms):
+         min:                                    0.07
+         avg:                                   39.89
+         max:                                  785.89
+         95th percentile:                      170.48
+         sum:                              5010042.59
+
+Threads fairness:
+    events (avg/stddev):           251.2040/23.57
+    execution time (avg/stddev):   10.0201/0.01
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br></div></div><div class="language- line-numbers-mode"><pre class="language-text"><code>[OMMITTED ~]$ cat /proc/cpuinfo 
+processor       : 0
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 79
+model name      : Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+stepping        : 1
+microcode       : 0xb000038
+cpu MHz         : 2299.954
+cache size      : 46080 KB
+physical id     : 0
+siblings        : 2
+core id         : 0
+cpu cores       : 2
+apicid          : 0
+initial apicid  : 0
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm cpuid_fault invpcid_single pti fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips        : 4600.16
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 46 bits physical, 48 bits virtual
+power management:
+
+processor       : 1
+vendor_id       : GenuineIntel
+cpu family      : 6
+model           : 79
+model name      : Intel(R) Xeon(R) CPU E5-2686 v4 @ 2.30GHz
+stepping        : 1
+microcode       : 0xb000038
+cpu MHz         : 2299.954
+cache size      : 46080 KB
+physical id     : 0
+siblings        : 2
+core id         : 1
+cpu cores       : 2
+apicid          : 2
+initial apicid  : 2
+fpu             : yes
+fpu_exception   : yes
+cpuid level     : 13
+wp              : yes
+flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx rdtscp lm constant_tsc rep_good nopl xtopology cpuid pni pclmulqdq ssse3 fma cx16 pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand hypervisor lahf_lm abm cpuid_fault invpcid_single pti fsgsbase bmi1 avx2 smep bmi2 erms invpcid xsaveopt
+bugs            : cpu_meltdown spectre_v1 spectre_v2 spec_store_bypass l1tf mds swapgs itlb_multihit
+bogomips        : 4600.16
+clflush size    : 64
+cache_alignment : 64
+address sizes   : 46 bits physical, 48 bits virtual
+power management:
+</code></pre> <div class="line-numbers-wrapper"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br><span class="line-number">13</span><br><span class="line-number">14</span><br><span class="line-number">15</span><br><span class="line-number">16</span><br><span class="line-number">17</span><br><span class="line-number">18</span><br><span class="line-number">19</span><br><span class="line-number">20</span><br><span class="line-number">21</span><br><span class="line-number">22</span><br><span class="line-number">23</span><br><span class="line-number">24</span><br><span class="line-number">25</span><br><span class="line-number">26</span><br><span class="line-number">27</span><br><span class="line-number">28</span><br><span class="line-number">29</span><br><span class="line-number">30</span><br><span class="line-number">31</span><br><span class="line-number">32</span><br><span class="line-number">33</span><br><span class="line-number">34</span><br><span class="line-number">35</span><br><span class="line-number">36</span><br><span class="line-number">37</span><br><span class="line-number">38</span><br><span class="line-number">39</span><br><span class="line-number">40</span><br><span class="line-number">41</span><br><span class="line-number">42</span><br><span class="line-number">43</span><br><span class="line-number">44</span><br><span class="line-number">45</span><br><span class="line-number">46</span><br><span class="line-number">47</span><br><span class="line-number">48</span><br><span class="line-number">49</span><br><span class="line-number">50</span><br><span class="line-number">51</span><br><span class="line-number">52</span><br><span class="line-number">53</span><br><span class="line-number">54</span><br></div></div></div> <footer class="page-edit" style="display:none;"><!----> <!----></footer> <!----> <!----></main> <!----></div></div></div></div><div class="global-ui"><div class="back-to-ceiling" style="right:1rem;bottom:6rem;width:2.5rem;height:2.5rem;border-radius:.25rem;line-height:2.5rem;display:none;" data-v-44bd5a18 data-v-44bd5a18><svg t="1574745035067" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5404" class="icon" data-v-44bd5a18><path d="M526.60727968 10.90185116a27.675 27.675 0 0 0-29.21455937 0c-131.36607665 82.28402758-218.69155461 228.01873535-218.69155402 394.07834331a462.20625001 462.20625001 0 0 0 5.36959153 69.94390903c1.00431239 6.55289093-0.34802892 13.13561351-3.76865779 18.80351572-32.63518765 54.11355614-51.75690182 118.55860487-51.7569018 187.94566865a371.06718723 371.06718723 0 0 0 11.50484808 91.98906777c6.53300375 25.50556257 41.68394495 28.14064038 52.69160883 4.22606766 17.37162448-37.73630017 42.14135425-72.50938081 72.80769204-103.21549295 2.18761121 3.04276886 4.15646224 6.24463696 6.40373557 9.22774369a1871.4375 1871.4375 0 0 0 140.04691725 5.34970492 1866.36093723 1866.36093723 0 0 0 140.04691723-5.34970492c2.24727335-2.98310674 4.21612437-6.18497483 6.3937923-9.2178004 30.66633723 30.70611158 55.4360664 65.4791928 72.80769147 103.21549355 11.00766384 23.91457269 46.15860503 21.27949489 52.69160879-4.22606768a371.15156223 371.15156223 0 0 0 11.514792-91.99901164c0-69.36717486-19.13165746-133.82216804-51.75690182-187.92578088-3.42062944-5.66790279-4.76302748-12.26056868-3.76865837-18.80351632a462.20625001 462.20625001 0 0 0 5.36959269-69.943909c-0.00994388-166.08943902-87.32547796-311.81420293-218.6915546-394.09823051zM605.93803103 357.87693858a93.93749974 93.93749974 0 1 1-187.89594924 6.1e-7 93.93749974 93.93749974 0 0 1 187.89594924-6.1e-7z" p-id="5405" data-v-44bd5a18></path><path d="M429.50777625 765.63860547C429.50777625 803.39355007 466.44236686 1000.39046097 512.00932183 1000.39046097c45.56695499 0 82.4922232-197.00623328 82.5015456-234.7518555 0-37.75494459-36.9345906-68.35043303-82.4922232-68.34111062-45.57627738-0.00932239-82.52019037 30.59548842-82.51086798 68.34111062z" p-id="5406" data-v-44bd5a18></path></svg></div></div></div>
+    <script src="/blog-vue-press-dev-hbc/assets/js/app.0418dc1b.js" defer></script><script src="/blog-vue-press-dev-hbc/assets/js/3.1c8a2787.js" defer></script><script src="/blog-vue-press-dev-hbc/assets/js/1.3cdefb19.js" defer></script><script src="/blog-vue-press-dev-hbc/assets/js/21.2391c26f.js" defer></script>
+  </body>
+</html>
